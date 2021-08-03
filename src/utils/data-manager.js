@@ -47,12 +47,21 @@ export default class DataManager {
 
   constructor() {}
 
+  getTableData(row) {
+    return row.tableData;
+  }
+
+  setTableData(row, tableData) {
+    row.tableData = tableData;
+  }
+
   setData(data) {
     this.selectedCount = 0;
     let prevDataObject = {};
     if (this.data.length !== 0 && this.data[0].id !== undefined) {
       prevDataObject = this.data.reduce((obj, row) => {
-        obj[row.tableData.id] = row.tableData;
+        const tableData = this.getTableData(row);
+        obj[tableData.id] = tableData;
         return obj;
       }, {});
     }
@@ -72,15 +81,14 @@ export default class DataManager {
         // is passed into material-table externally.
         uuid: row.uuid || uuid.v4(),
         ...prevTableData,
-        ...row.tableData
+        ...this.getTableData(row)
       };
       if (tableData.checked) {
         this.selectedCount++;
       }
-      return {
-        ...row,
-        tableData
-      };
+
+      this.setTableData(row, tableData);
+      return row;
     });
 
     this.filtered = false;
