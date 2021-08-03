@@ -1,6 +1,5 @@
 .docz
 .vscode
-dist
 dist_esbuild
 node_modules
 yarn.lock
